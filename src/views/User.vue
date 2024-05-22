@@ -1,25 +1,22 @@
 <template>
   <div style="text-align: left">
     <div style="padding: 10px">
-      <el-input placeholder="注文番号を入力してください" style="font-size: 12px; width: 220px"></el-input>
-
-      <el-date-picker v-model="value2" type="daterange" align="left" unlink-panels range-separator="~"
-        start-placeholder="開始日付" end-placeholder="終了日付" :picker-options="pickerOptions" style="margin-left: 30px"
-        :default-value="defaultMonthDate">
-      </el-date-picker>
+      <b style="color: blueviolet">注文番号</b><el-input  style="font-size: 12px; width: 220px;"></el-input>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <b style="color: blueviolet">配送番号</b><el-input  style="font-size: 12px; width: 220px"></el-input>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <b style="color: blueviolet">配送方法</b><el-input  style="font-size: 12px; width: 220px"></el-input>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+      <b style="color: blueviolet">配送先</b><el-input  style="font-size: 12px; width: 220px"></el-input>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <b style="color: blueviolet">連絡先</b><el-input  style="font-size: 12px; width: 220px"></el-input>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+     
+     
 
       <el-dropdown>
         <el-button style="margin-left: 30px">
-          注文状況<i class="el-icon-arrow-down el-icon--right"></i>
+          配送状況<i class="el-icon-arrow-down el-icon--right"></i>
         </el-button>
         <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item>受取</el-dropdown-item>
+          <el-dropdown-item>未配送</el-dropdown-item>
           <el-dropdown-item>配送中</el-dropdown-item>
-          <el-dropdown-item>在庫保留</el-dropdown-item>
-          <el-dropdown-item>営業確認中</el-dropdown-item>
-          <el-dropdown-item>部長確認中</el-dropdown-item>
-          <el-dropdown-item>キャンセル中</el-dropdown-item>
-          <el-dropdown-item>キャンセル済み</el-dropdown-item>
+          <el-dropdown-item>配送済み</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
     </div>
@@ -46,16 +43,22 @@
       <el-table :data="items" border stripe :header-cell-style="{ background: '#eee' }"
         @selection-change="handleSelectionChange">
         <el-table-column type="selection"> </el-table-column>
-        <el-table-column prop="orderNumber" label="注文番号" min-width="10%" header-align="center">
+        <el-table-column prop="orderNumber" label="配送No." min-width="10%" header-align="center">
         </el-table-column>
-        <el-table-column prop="orderDate" label="注文日" min-width="10%" align="center" header-align="center">
+        <el-table-column prop="orderDate" label="注文番号" min-width="10%" align="center" header-align="center">
         </el-table-column>
-        <el-table-column prop="orderQuantity" label="注文数量" min-width="10%" align="right" header-align="center">
+        <el-table-column prop="orderQuantity" label="配送方法" min-width="10%" align="right" header-align="center">
         </el-table-column>
-        <el-table-column prop="totalPrice" label="合計金額" min-width="10%" align="right" header-align="right">
+        <el-table-column prop="totalPrice" label="配送先" min-width="10%" align="right" header-align="right">
         </el-table-column>
-        <el-table-column prop="orderStatus" label="注文状況" min-width="10%" align="center">
-          <template slot="header">
+        <el-table-column prop="totalPrice" label="連絡先" min-width="10%" align="right" header-align="right">
+        </el-table-column>
+        <el-table-column prop="totalPrice" label="予定配送日" min-width="10%" align="right" header-align="right">
+        </el-table-column>
+        <el-table-column prop="totalPrice" label="配送状態" min-width="10%" align="right" header-align="right">
+        </el-table-column>
+        <el-table-column prop="orderStatus" label="メモ" min-width="10%" align="center">
+          <!-- <template slot="header">
             <el-dropdown>
               <el-button type="text" style="">
                 注文状況 <i class="el-icon-arrow-down el-icon--right"></i>
@@ -70,7 +73,7 @@
                 <el-dropdown-item>キャンセル済み</el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
-          </template>
+          </template> -->
         </el-table-column>
         <el-table-column prop="deliveryAddress" label="お届け先" min-width="30%" header-align="center">
         </el-table-column>
