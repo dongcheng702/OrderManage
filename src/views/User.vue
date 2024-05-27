@@ -1,7 +1,14 @@
 <template>
   <div style="text-align: left">
     <div style="padding: 10px">
+<<<<<<< Updated upstream
       <el-input placeholder="注文番号を入力してください" style="font-size: 12px; width: 220px"></el-input>
+=======
+      <el-input
+        placeholder="AAA注文番号を入力してください"
+        style="font-size: 12px; width: 220px"
+      ></el-input>
+>>>>>>> Stashed changes
 
       <el-date-picker v-model="value2" type="daterange" align="left" unlink-panels range-separator="~"
         start-placeholder="開始日付" end-placeholder="終了日付" :picker-options="pickerOptions" style="margin-left: 30px"
