@@ -5,7 +5,7 @@
       <el-input placeholder="注文番号を入力してください" style="font-size: 12px; width: 220px"></el-input>
 =======
       <el-input
-        placeholder="AAA注文番号を入力してください"
+        placeholder="中毛爱学习注文番号を入力してください"
         style="font-size: 12px; width: 220px"
       ></el-input>
 >>>>>>> Stashed changes
