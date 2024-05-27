@@ -7,21 +7,17 @@
       label-width="100px"
       class="demo-ruleForm scrollable-form"
     >
-      <div class="section-title">ご配送：</div>
+      <div class="inputBox">ご配送：</div>
 
-      <el-form-item label="受取人氏名:" prop="name" class="inputBox">
+      <el-form-item label="お名前:" prop="name" class="inputBox">
         <el-input v-model="ruleForm.name"></el-input>
       </el-form-item>
 
-      <el-form-item label="電話番号:" prop="postCode" class="inputBox">
-        <el-input v-model="ruleForm.phone"></el-input>
-      </el-form-item>
-
-      <el-form-item label="郵便番号:" prop="postCode" class="inputBox">
+      <el-form-item label="お郵便番号:" prop="postCode" class="inputBox">
         <el-input v-model="ruleForm.postCode"></el-input>
       </el-form-item>
 
-      <el-form-item label="住所:" prop="address" class="inputBox">
+      <el-form-item label="お住所:" prop="address" class="inputBox">
         <el-input v-model="ruleForm.address" style="width: 500px"></el-input>
       </el-form-item>
 
@@ -35,6 +31,10 @@
           @blur="validateDeliveryMethod"
           aria-required="true"
         ></el-cascader>
+      </el-form-item>
+
+      <el-form-item label="即时配送" prop="delivery" class="inputBox">
+        <el-switch v-model="ruleForm.delivery"></el-switch>
       </el-form-item>
 
       <div class="section-title">支払方法を選択してください</div>
@@ -82,19 +82,11 @@
         </el-form-item>
       </template>
 
-<<<<<<< HEAD
-
-      <template v-else-if="
-        ['PayPay', 'LinePay', 'WeChat', 'AliPay'].includes(ruleForm.payValue)
-      ">
-
-=======
       <template
         v-else-if="
           ['PayPay', 'LinePay', 'WeChat', 'AliPay'].includes(ruleForm.payValue)
         "
       >
->>>>>>> parent of 92ae5d0 (Merge pull request #17 from dongcheng702/LX)
         <el-form-item label="スキャン" class="inputBox">
           <img
             :src="getPaymentImage(ruleForm.payValue)"
@@ -102,7 +94,7 @@
             class="payment-qr-code"
           />
         </el-form-item>
-      </template> -->
+      </template>
     </el-form>
 
     <div class="form-buttons">
@@ -123,7 +115,6 @@ export default {
       ruleForm: {
         name: "",
         postCode: "",
-        phone: "",
         address: "",
         deliveryMethod: null,
         delivery: false,
@@ -141,32 +132,15 @@ export default {
           },
           {
             min: 1,
-            max: 20,
+            max: 50,
             message: "入力値の範囲は1から50まで",
-            trigger: "blur",
-          },
-        ],
-        phone: [
-          {
-            required: true,
-            message: "お電話番号を入力してください。",
-            trigger: "blur",
-          },
-          {
-            pattern: /^[0-9]{10,11}$/,
-            message: "電話番号の形式が正しくありません",
-            trigger: "blur",
-          },
-          {
-            max: 20,
-            message: "電話番号が指定の長さを超えています",
             trigger: "blur",
           },
         ],
         postCode: [
           {
             required: true,
-            message: "お郵便番号を入力してください",
+            message: "郵便番号を入力してください",
             trigger: "blur",
           },
           {
@@ -174,21 +148,11 @@ export default {
             message: "郵便番号の形式が正しくありません（例：114-0002）",
             trigger: "blur",
           },
-          {
-            max: 10,
-            message: "郵便番号が指定の長さを超えています",
-            trigger: "blur",
-          },
         ],
         address: [
           {
             required: true,
             message: "お住所を入力してください",
-            trigger: "blur",
-          },
-          {
-            max: 60,
-            message: "住所が指定の長さを超えています",
             trigger: "blur",
           },
         ],
@@ -212,25 +176,16 @@ export default {
             message: "カード番号を入力してください",
             trigger: "blur",
           },
-          {
-            pattern: /^[0-9]{16}$/,
-            message: "カード番号は16桁の数字で入力してください",
-            trigger: "blur",
-          },
         ],
         expiryDate: [
           {
-            validator: this.validateExpiryDate,
-            trigger: "change",
+            required: true,
+            message: "有効期限を入力してください",
+            trigger: "blur",
           },
         ],
         cvv: [
           { required: true, message: "CVVを入力してください", trigger: "blur" },
-          {
-            pattern: /^[0-9]{3,4}$/,
-            message: "新のCVVコードを入力してください",
-            trigger: "blur",
-          },
         ],
       },
       payOptions: [
@@ -338,39 +293,20 @@ export default {
     back() {
       this.$emit("back");
     },
-    validateExpiryDate(rule, value, callback) {
-      if (!value) {
-        return callback(new error("有効期限を入力してください"));
+    getPaymentImage(payValue) {
+      switch (payValue) {
+        case "PayPay":
+          return require("@/img/AliPay.png");
+        case "LinePay":
+          return require("@/img/WeChat.jpg");
+        case "WeChat":
+          return require("@/img/WeChat.jpg");
+        case "AliPay":
+          return require("@/img/AliPay.png");
+        default:
+          return "";
       }
-      const year = value.getFullYear;
-      const month = value.getMonth + 1;
-      const currentDate = new Date();
-      const currentYear = currentDate.getFullYear;
-      const currentMonth = currentDate.getMonth + 1;
-
-      if (
-        year < currentYear ||
-        (year === currentYear && month < currentMonth)
-      ) {
-        return callback(new error("有効期限は未来の年月を選択してください"));
-      };
-
-      callback();
     },
-    // getPaymentImage(payValue) {
-    //   switch (payValue) {
-    //     case "PayPay":
-    //       return require("@/img/AliPay.png");
-    //     case "LinePay":
-    //       return require("@/img/WeChat.jpg");
-    //     case "WeChat":
-    //       return require("@/img/WeChat.jpg");
-    //     case "AliPay":
-    //       return require("@/img/AliPay.png");
-    //     default:
-    //       return "";
-    //   }
-    // },
   },
 };
 </script>

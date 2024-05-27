@@ -39,7 +39,7 @@
         </div>
         <div style="position: fixed; bottom: 0; right: 0; margin-right: 50px; margin-bottom: 50px;">
             <el-button @click="drawer = true" style="margin-left: 16px;"><i class=el-icon-goods>
-                    注文確認</i>
+                注文確認</i>
             </el-button>
         </div>
         <div style="padding: 10px;position: fixed; bottom: 0; margin-right: 50px; margin-bottom: 50px;">
@@ -55,7 +55,7 @@
                 <el-table-column prop="unitprice" label="商品単価" width="100" align="right">
                 </el-table-column>
                 <el-table-column prop="quantity" label="商品数量" width="180" align="right">
-                    <template slot-scope="scope">
+                    <template slot-scope="scope" >
                         <el-input align="right" v-model="scope.row.quantity" @change="handleQuantityChange(scope.row)"
                             @keyup.enter.native="saveQuantity(scope.row)" size="mini"></el-input>
                     </template>
@@ -120,7 +120,7 @@ export default {
                 value: '选项3',
                 label: '入荷待ち'
             }],
-            value: '',
+            value: ''
             options: [{
                 value: '选项1',
                 label: '在庫あり'

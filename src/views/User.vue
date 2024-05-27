@@ -1,11 +1,23 @@
 <template>
   <div style="text-align: left">
     <div style="padding: 10px">
-      <el-input placeholder="注文番号を入力してください" style="font-size: 12px; width: 220px"></el-input>
+      <el-input
+        placeholder="注文番号を入力してください"
+        style="font-size: 12px; width: 220px"
+      ></el-input>
 
-      <el-date-picker v-model="value2" type="daterange" align="left" unlink-panels range-separator="~"
-        start-placeholder="開始日付" end-placeholder="終了日付" :picker-options="pickerOptions" style="margin-left: 30px"
-        :default-value="defaultMonthDate">
+      <el-date-picker
+        v-model="value2"
+        type="daterange"
+        align="left"
+        unlink-panels
+        range-separator="~"
+        start-placeholder="開始日付"
+        end-placeholder="終了日付"
+        :picker-options="pickerOptions"
+        style="margin-left: 30px"
+        :default-value="defaultMonthDate"
+      >
       </el-date-picker>
 
       <el-dropdown>
@@ -25,24 +37,61 @@
       </el-dropdown>
     </div>
     <el-row>
+<<<<<<< HEAD
       <el-button type="success" @click="select" style="transform: translateX(10px); ">検索<i class="el-icon-search"
           style="margin-left: 5px"></i></el-button>
       <!-- <el-button type="info" style="margin-left: 30px; padding-left: 12px" @click="reset">リセット<i class="el-icon-refresh"
           style="margin-left: 5px"></i></el-button>
       <el-dropdown style="text-align: right;">
         <el-button type="primary" style="margin-left : 30px;">
+=======
+      <el-button
+        type="success"
+        @click="select"
+        style="transform: translateX(10px)"
+        >検索<i class="el-icon-search" style="margin-left: 5px"></i
+      ></el-button>
+      <el-button
+        type="info"
+        style="margin-left: 30px; padding-left: 12px"
+        @click="reset"
+        >リセット<i class="el-icon-refresh" style="margin-left: 5px"></i
+      ></el-button>
+      <el-dropdown>
+        <el-button type="primary" style="margin-left: 30px">
+>>>>>>> parent of 92ae5d0 (Merge pull request #17 from dongcheng702/LX)
           エクスポート<i class="el-icon-arrow-down el-icon--right"></i>
         </el-button>
         <el-dropdown-menu slot="dropdown">
           <el-dropdown-item v-on:click.native="expxlsx">.xlsx</el-dropdown-item>
           <el-dropdown-item v-on:click.native="exppdf">.pdf</el-dropdown-item>
         </el-dropdown-menu>
+<<<<<<< HEAD
       </el-dropdown> -->
+=======
+      </el-dropdown>
+      <div style="padding: 10px">
+        <el-button
+          type="success"
+          round
+          style="float: right; margin-top: 40px"
+          @click="newOrder"
+          icon="el-icon-circle-plus"
+          >新規注文</el-button
+        >
+      </div>
+>>>>>>> parent of 92ae5d0 (Merge pull request #17 from dongcheng702/LX)
     </el-row>
     <div style="margin-top: 10px">
-      <el-table :data="items" border stripe :header-cell-style="{ background: '#eee' }"
-        @selection-change="handleSelectionChange">
+      <el-table
+        :data="items"
+        border
+        stripe
+        :header-cell-style="{ background: '#eee' }"
+        @selection-change="handleSelectionChange"
+      >
         <el-table-column type="selection"> </el-table-column>
+<<<<<<< HEAD
 
         <el-table-column
           prop="orderNumber"
@@ -60,6 +109,46 @@
         </el-table-column>
         <el-table-column prop="orderStatus" label="注文状況" min-width="10%" align="center">
           <!-- <template slot="header">
+=======
+        <el-table-column
+          prop="orderNumber"
+          label="注文番号"
+          min-width="10%"
+          header-align="center"
+        >
+        </el-table-column>
+        <el-table-column
+          prop="orderDate"
+          label="注文日"
+          min-width="10%"
+          align="center"
+          header-align="center"
+        >
+        </el-table-column>
+        <el-table-column
+          prop="orderQuantity"
+          label="注文数量"
+          min-width="10%"
+          align="right"
+          header-align="center"
+        >
+        </el-table-column>
+        <el-table-column
+          prop="totalPrice"
+          label="合計金額"
+          min-width="10%"
+          align="right"
+          header-align="right"
+        >
+        </el-table-column>
+        <el-table-column
+          prop="orderStatus"
+          label="注文状況"
+          min-width="10%"
+          align="center"
+        >
+          <template slot="header">
+>>>>>>> parent of 92ae5d0 (Merge pull request #17 from dongcheng702/LX)
             <el-dropdown>
               <el-button type="text">
                 注文状況 <i class="el-icon-arrow-down el-icon--right"></i>
@@ -77,10 +166,25 @@
             </el-dropdown>
           </template> -->
         </el-table-column>
-        <el-table-column prop="deliveryAddress" label="お届け先" min-width="30%" header-align="center">
+        <el-table-column
+          prop="deliveryAddress"
+          label="お届け先"
+          min-width="30%"
+          header-align="center"
+        >
         </el-table-column>
+<<<<<<< HEAD
         <el-table-column prop="deliveryMethod" label="配送方法" min-width="10%" align="center">
           <!-- <template slot="header">
+=======
+        <el-table-column
+          prop="deliveryMethod"
+          label="配送方法"
+          min-width="10%"
+          align="center"
+        >
+          <template slot="header">
+>>>>>>> parent of 92ae5d0 (Merge pull request #17 from dongcheng702/LX)
             <el-dropdown>
               <el-button type="text" style="">
                 配送方法 <i class="el-icon-arrow-down el-icon--right"></i>
@@ -103,15 +207,31 @@
           <el-tooltip content="キャンセル" placement="top" @click="cancelOrder">
             <el-button type="danger" icon="el-icon-s-release" circle size="mini"></el-button>
           </el-tooltip>
+<<<<<<< HEAD
           <el-tooltip content="再購入" placement="top" @click.native="reBuy">
             <el-button type="success" icon="el-icon-goods" circle size="mini"></el-button>
+=======
+          <el-tooltip content="再購入" placement="top" @click="reBuy">
+            <el-button
+              type="success"
+              icon="el-icon-goods"
+              circle
+              size="mini"
+            ></el-button>
+>>>>>>> parent of 92ae5d0 (Merge pull request #17 from dongcheng702/LX)
           </el-tooltip>
         </el-table-column> -->
       </el-table>
       <div style="padding: 10px">
-        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pageNum"
-          :page-sizes="[5, 10, 15, 20]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper"
-          :total="total">
+        <el-pagination
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :current-page="pageNum"
+          :page-sizes="[5, 10, 15, 20]"
+          :page-size="pageSize"
+          layout="total, sizes, prev, pager, next, jumper"
+          :total="total"
+        >
         </el-pagination>
 
         <OrderDetails :isVisible.sync="isDialogVisible"></OrderDetails>
@@ -122,10 +242,10 @@
       </div>
     </div>
     <div>
-      <payment :dialogTableVisible.sync="flag">
+ <payment :dialogTableVisible.sync="flag">
 
 
-      </payment>
+ </payment>
 
 
     </div>
@@ -216,9 +336,9 @@ export default {
         },
       ],
       value2: "",
-      flag: false
+      flag:false
     };
-
+    
   },
   props: {},
   methods: {
@@ -268,7 +388,7 @@ export default {
     payment() {
       console.log("editOrder");
       this.flag = true
-    },
+     },
     cancelOrder() { },
     reBuy() {
       console.log("test");
