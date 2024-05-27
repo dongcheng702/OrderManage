@@ -95,7 +95,6 @@
           />
         </el-form-item>
       </template>
-      -->
     </el-form>
 
     <div class="form-buttons">
@@ -214,7 +213,7 @@ export default {
         expiryDate: [
           {
             validator: this.validateExpiryDate,
-            trigger: "change",
+            trigger: "blur",
           },
         ],
         cvv: [
@@ -333,19 +332,19 @@ export default {
     },
     validateExpiryDate(rule, value, callback) {
       if (!value) {
-        return callback(new error("有効期限を入力してください"));
+        return callback(new Error("有効期限を入力してください"));
       }
-      const year = value.getFullYear;
-      const month = value.getMonth + 1;
+      const year = value.getFullYear();
+      const month = value.getMonth() + 1;
       const currentDate = new Date();
-      const currentYear = currentDate.getFullYear;
-      const currentMonth = currentDate.getMonth + 1;
+      const currentYear = currentDate.getFullYear();
+      const currentMonth = currentDate.getMonth() + 1;
 
       if (
         year < currentYear ||
         (year === currentYear && month < currentMonth)
       ) {
-        return callback(new error("有効期限は未来の年月を選択してください"));
+        return callback(new Error("未来の年月を選択してください"));
       }
 
       callback();
