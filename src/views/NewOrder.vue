@@ -22,7 +22,7 @@ export default {
       active: 0,
     };
   },
-  created() {},
+  created() { },
   methods: {
     next(data) {
       console.log(data);

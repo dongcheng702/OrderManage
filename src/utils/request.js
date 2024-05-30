@@ -3,7 +3,7 @@ import axios from 'axios';
 
 // 创建一个 axios 实例
 const instance = axios.create({
-    baseURL: 'http://localhost:8084', // 你的 API 基础 URL
+    baseURL: 'http://localhost:8888', // 你的 API 基础 URL
     timeout: 1000,
     headers: {
         'Content-Type': 'application/json'

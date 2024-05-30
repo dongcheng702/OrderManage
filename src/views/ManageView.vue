@@ -1,12 +1,9 @@
 <template>
   <el-container style="min-height: 100vh">
-    <el-aside
-      :width="sideWidth + 'px'"
-      style="
+    <el-aside :width="sideWidth + 'px'" style="
         background-color: rgba(238, 241, 246, 0.981);
         box-shadow: 2px 0 6px rgb(0 21 41 / 35%);
-      "
-    >
+      ">
       <Aside />
     </el-aside>
     <el-container>

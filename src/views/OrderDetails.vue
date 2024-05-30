@@ -38,11 +38,14 @@ export default {
     orderId: {
       type: Boolean,
       required: true,
+      default:1,
     },
   },
   data() {
     return {
       localVisible: this.isVisible, // 使用一个本地的 `data` 属性来存储初始的 isVisible 值
+      amountSum:0,
+      productTypeCount:0,
       tableData: [
         {
           productName: "商品1",

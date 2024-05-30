@@ -1,12 +1,6 @@
 <template>
   <div>
-    <el-form
-      :model="ruleForm"
-      :rules="rules"
-      ref="ruleForm"
-      label-width="100px"
-      class="demo-ruleForm scrollable-form"
-    >
+    <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm scrollable-form">
       <div class="section-title">ご配送：</div>
 
       <el-form-item label="受取人氏名:" prop="name" class="inputBox">
@@ -26,55 +20,28 @@
       </el-form-item>
 
       <el-form-item label="配送方法:" prop="deliveryMethod" class="inputBox">
-        <el-cascader
-          placeholder="配送方法を選択してください"
-          v-model="ruleForm.deliveryMethod"
-          :options="options"
-          :props="{ expandTrigger: 'hover' }"
-          @change="handleChange"
-          @blur="validateDeliveryMethod"
-          aria-required="true"
-        ></el-cascader>
+        <el-cascader placeholder="配送方法を選択してください" v-model="ruleForm.deliveryMethod" :options="options"
+          :props="{ expandTrigger: 'hover' }" @change="handleChange" @blur="validateDeliveryMethod"
+          aria-required="true"></el-cascader>
       </el-form-item>
 
       <div class="section-title">支払方法を選択してください</div>
 
       <el-form-item label="支払方法" prop="payValue" class="inputBox">
-        <el-select
-          v-model="ruleForm.payValue"
-          placeholder="支払方法"
-          class="dropDownBox"
-          @change="handlePayChange"
-          @blur="validatePayMethod"
-        >
-          <el-option
-            v-for="item in payOptions"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          ></el-option>
+        <el-select v-model="ruleForm.payValue" placeholder="支払方法" class="dropDownBox" @change="handlePayChange"
+          @blur="validatePayMethod">
+          <el-option v-for="item in payOptions" :key="item.value" :label="item.label" :value="item.value"></el-option>
         </el-select>
       </el-form-item>
 
       <template v-if="ruleForm.payValue === 'creditCard'">
-        <el-form-item
-          label="カード番号"
-          prop="creditCardNumber"
-          class="inputBox"
-        >
-          <el-input
-            v-model="ruleForm.creditCardNumber"
-            style="width: 400px"
-          ></el-input>
+        <el-form-item label="カード番号" prop="creditCardNumber" class="inputBox">
+          <el-input v-model="ruleForm.creditCardNumber" style="width: 400px"></el-input>
         </el-form-item>
 
         <el-form-item label="有効期限" prop="expiryDate" class="inputBox">
-          <el-date-picker
-            v-model="ruleForm.expiryDate"
-            type="month"
-            format="MM/yy"
-            placeholder="選択してください"
-          ></el-date-picker>
+          <el-date-picker v-model="ruleForm.expiryDate" type="month" format="MM/yy"
+            placeholder="選択してください"></el-date-picker>
         </el-form-item>
 
         <el-form-item label="CVV" prop="cvv" class="inputBox">
@@ -82,17 +49,11 @@
         </el-form-item>
       </template>
 
-      <template
-        v-else-if="
-          ['PayPay', 'LinePay', 'WeChat', 'AliPay'].includes(ruleForm.payValue)
-        "
-      >
+      <template v-else-if="
+        ['PayPay', 'LinePay', 'WeChat', 'AliPay'].includes(ruleForm.payValue)
+      ">
         <el-form-item label="スキャン" class="inputBox">
-          <img
-            :src="getPaymentImage(ruleForm.payValue)"
-            :alt="ruleForm.payValue + ' QRコード'"
-            class="payment-qr-code"
-          />
+          <img :src="getPaymentImage(ruleForm.payValue)" :alt="ruleForm.payValue + ' QRコード'" class="payment-qr-code" />
         </el-form-item>
       </template>
     </el-form>
@@ -307,7 +268,7 @@ export default {
       //     ],
       //   },
       // ],
-      options:[],
+      options: [],
     };
   },
   created() {
