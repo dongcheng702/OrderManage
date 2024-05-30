@@ -1,47 +1,80 @@
 <template>
   <div>
-    <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm scrollable-form">
+    <el-form
+      :model="ruleForm"
+      :rules="rules"
+      ref="ruleForm"
+      label-width="100px"
+      class="demo-ruleForm scrollable-form"
+    >
       <div class="section-title">ご配送：</div>
 
-      <el-form-item label="お名前:" prop="name" class="inputBox">
+      <el-form-item label="受取人氏名:" prop="name" class="inputBox">
         <el-input v-model="ruleForm.name"></el-input>
       </el-form-item>
 
-      <el-form-item label="お郵便番号:" prop="postCode" class="inputBox">
+      <el-form-item label="電話番号:" prop="postCode" class="inputBox">
+        <el-input v-model="ruleForm.phone"></el-input>
+      </el-form-item>
+
+      <el-form-item label="郵便番号:" prop="postCode" class="inputBox">
         <el-input v-model="ruleForm.postCode"></el-input>
       </el-form-item>
 
-      <el-form-item label="お住所:" prop="address" class="inputBox">
+      <el-form-item label="住所:" prop="address" class="inputBox">
         <el-input v-model="ruleForm.address" style="width: 500px"></el-input>
       </el-form-item>
 
       <el-form-item label="配送方法:" prop="deliveryMethod" class="inputBox">
-        <el-cascader placeholder="配送方法を選択してください" v-model="ruleForm.deliveryMethod" :options="options"
-          :props="{ expandTrigger: 'hover' }" @change="handleChange" @blur="validateDeliveryMethod"
-          aria-required="true"></el-cascader>
-      </el-form-item>
-
-      <el-form-item label="即时配送" prop="delivery" class="inputBox">
-        <el-switch v-model="ruleForm.delivery"></el-switch>
+        <el-cascader
+          placeholder="配送方法を選択してください"
+          v-model="ruleForm.deliveryMethod"
+          :options="options"
+          :props="{ expandTrigger: 'hover' }"
+          @change="handleChange"
+          @blur="validateDeliveryMethod"
+          aria-required="true"
+        ></el-cascader>
       </el-form-item>
 
       <div class="section-title">支払方法を選択してください</div>
 
       <el-form-item label="支払方法" prop="payValue" class="inputBox">
-        <el-select v-model="ruleForm.payValue" placeholder="支払方法" class="dropDownBox" @change="handlePayChange"
-          @blur="validatePayMethod">
-          <el-option v-for="item in payOptions" :key="item.value" :label="item.label" :value="item.value"></el-option>
+        <el-select
+          v-model="ruleForm.payValue"
+          placeholder="支払方法"
+          class="dropDownBox"
+          @change="handlePayChange"
+          @blur="validatePayMethod"
+        >
+          <el-option
+            v-for="item in payOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          ></el-option>
         </el-select>
       </el-form-item>
 
       <template v-if="ruleForm.payValue === 'creditCard'">
-        <el-form-item label="カード番号" prop="creditCardNumber" class="inputBox">
-          <el-input v-model="ruleForm.creditCardNumber" style="width: 400px"></el-input>
+        <el-form-item
+          label="カード番号"
+          prop="creditCardNumber"
+          class="inputBox"
+        >
+          <el-input
+            v-model="ruleForm.creditCardNumber"
+            style="width: 400px"
+          ></el-input>
         </el-form-item>
 
         <el-form-item label="有効期限" prop="expiryDate" class="inputBox">
-          <el-date-picker v-model="ruleForm.expiryDate" type="month" format="MM/yy"
-            placeholder="選択してください"></el-date-picker>
+          <el-date-picker
+            v-model="ruleForm.expiryDate"
+            type="month"
+            format="MM/yy"
+            placeholder="選択してください"
+          ></el-date-picker>
         </el-form-item>
 
         <el-form-item label="CVV" prop="cvv" class="inputBox">
@@ -49,11 +82,17 @@
         </el-form-item>
       </template>
 
-      <template v-else-if="
-        ['PayPay', 'LinePay', 'WeChat', 'AliPay'].includes(ruleForm.payValue)
-      ">
+      <template
+        v-else-if="
+          ['PayPay', 'LinePay', 'WeChat', 'AliPay'].includes(ruleForm.payValue)
+        "
+      >
         <el-form-item label="スキャン" class="inputBox">
-          <img :src="getPaymentImage(ruleForm.payValue)" :alt="ruleForm.payValue + ' QRコード'" class="payment-qr-code" />
+          <img
+            :src="getPaymentImage(ruleForm.payValue)"
+            :alt="ruleForm.payValue + ' QRコード'"
+            class="payment-qr-code"
+          />
         </el-form-item>
       </template>
     </el-form>
@@ -76,6 +115,7 @@ export default {
       ruleForm: {
         name: "",
         postCode: "",
+        phone: "",
         address: "",
         deliveryMethod: null,
         delivery: false,
@@ -93,15 +133,32 @@ export default {
           },
           {
             min: 1,
-            max: 50,
+            max: 20,
             message: "入力値の範囲は1から50まで",
+            trigger: "blur",
+          },
+        ],
+        phone: [
+          {
+            required: true,
+            message: "お電話番号を入力してください。",
+            trigger: "blur",
+          },
+          {
+            pattern: /^[0-9]{10,11}$/,
+            message: "電話番号の形式が正しくありません",
+            trigger: "blur",
+          },
+          {
+            max: 20,
+            message: "電話番号が指定の長さを超えています",
             trigger: "blur",
           },
         ],
         postCode: [
           {
             required: true,
-            message: "郵便番号を入力してください",
+            message: "お郵便番号を入力してください",
             trigger: "blur",
           },
           {
@@ -109,11 +166,21 @@ export default {
             message: "郵便番号の形式が正しくありません（例：114-0002）",
             trigger: "blur",
           },
+          {
+            max: 10,
+            message: "郵便番号が指定の長さを超えています",
+            trigger: "blur",
+          },
         ],
         address: [
           {
             required: true,
             message: "お住所を入力してください",
+            trigger: "blur",
+          },
+          {
+            max: 60,
+            message: "住所が指定の長さを超えています",
             trigger: "blur",
           },
         ],
@@ -138,20 +205,24 @@ export default {
             trigger: "blur",
           },
           {
-            max: 16,
-            message: "入力範囲は16位まで",
+            pattern: /^[0-9]{16}$/,
+            message: "カード番号は16桁の数字で入力してください",
             trigger: "blur",
           },
         ],
         expiryDate: [
           {
-            required: true,
-            message: "有効期限を入力してください",
+            validator: this.validateExpiryDate,
             trigger: "blur",
           },
         ],
         cvv: [
           { required: true, message: "CVVを入力してください", trigger: "blur" },
+          {
+            pattern: /^[0-9]{3,4}$/,
+            message: "新のCVVコードを入力してください",
+            trigger: "blur",
+          },
         ],
       },
       payOptions: [
@@ -161,82 +232,87 @@ export default {
         { value: "WeChat", label: "WeChat" },
         { value: "AliPay", label: "AliPay" },
       ],
-      options: [
-        {
-          value: "haiwai",
-          label: "海外",
-          children: [
-            {
-              value: "yamato",
-              label: "ヤマト運輸",
-              children: [
-                { value: "yamatohaiyun", label: "海上輸送" },
-                { value: "yamatokongyun", label: "航空輸送" },
-              ],
-            },
-            {
-              value: "youbianju",
-              label: "郵便局",
-              children: [
-                { value: "youbianjuhaiyun", label: "海上輸送" },
-                { value: "youbianjukongyun", label: "航空輸送" },
-              ],
-            },
-            {
-              value: "zuochuanjibian",
-              label: "佐川急便",
-              children: [{ value: "zuochuankongyun", label: "航空輸送" }],
-            },
-            {
-              value: "xinongyunshu",
-              label: "西濃運輸",
-              children: [{ value: "xinongkongyun", label: "航空輸送" }],
-            },
-          ],
-        },
-        {
-          value: "guonei",
-          label: "国内",
-          children: [
-            {
-              value: "yamato",
-              label: "ヤマト運輸",
-              children: [
-                { value: "yamatozhaijibian", label: "宅急便" },
-                { value: "yamatohaiyun", label: "海上輸送" },
-                { value: "yamatokongyun", label: "航空輸送" },
-              ],
-            },
-            {
-              value: "youbianju",
-              label: "郵便局",
-              children: [
-                { value: "youbianjuzhaijibian", label: "宅急便" },
-                { value: "youbianjukuaisu", label: "スピード便" },
-                { value: "youbianjuhaiyun", label: "海上輸送" },
-                { value: "youbianjukongyun", label: "航空輸送" },
-              ],
-            },
-            {
-              value: "zuochuanjibian",
-              label: "佐川急便",
-              children: [
-                { value: "zuochuanzhaijibian", label: "宅急便" },
-                { value: "zuochuankongyun", label: "航空輸送" },
-              ],
-            },
-            {
-              value: "xinongyunshu",
-              label: "西濃運輸",
-              children: [
-                { value: "xinongkuaisu", label: "スピード便" },
-                { value: "xinongkongyun", label: "航空輸送" },
-              ],
-            },
-          ],
-        },
-      ],
+      // options: [
+      //   {
+      //     value: "haiwai",
+      //     label: "海外",
+      //     children: [
+      //       {
+      //         value: "yamato",
+      //         label: "ヤマト運輸",
+      //         children: [
+      //           { value: "yamatohaiyun", label: "海上輸送" },
+      //           { value: "yamatokongyun", label: "航空輸送" },
+      //         ],
+      //       },
+      //       {
+      //         value: "youbianju",
+      //         label: "郵便局",
+      //         children: [
+      //           { value: "youbianjuhaiyun", label: "海上輸送" },
+      //           { value: "youbianjukongyun", label: "航空輸送" },
+      //         ],
+      //       },
+      //       {
+      //         value: "zuochuanjibian",
+      //         label: "佐川急便",
+      //         children: [{ value: "zuochuankongyun", label: "航空輸送" }],
+      //       },
+      //       {
+      //         value: "xinongyunshu",
+      //         label: "西濃運輸",
+      //         children: [{ value: "xinongkongyun", label: "航空輸送" }],
+      //       },
+      //     ],
+      //   },
+      //   {
+      //     value: "guonei",
+      //     label: "国内",
+      //     children: [
+      //       {
+      //         value: "yamato",
+      //         label: "ヤマト運輸",
+      //         children: [
+      //           { value: "yamatozhaijibian", label: "宅急便" },
+      //           { value: "yamatohaiyun", label: "海上輸送" },
+      //           { value: "yamatokongyun", label: "航空輸送" },
+      //         ],
+      //       },
+      //       {
+      //         value: "youbianju",
+      //         label: "郵便局",
+      //         children: [
+      //           { value: "youbianjuzhaijibian", label: "宅急便" },
+      //           { value: "youbianjukuaisu", label: "スピード便" },
+      //           { value: "youbianjuhaiyun", label: "海上輸送" },
+      //           { value: "youbianjukongyun", label: "航空輸送" },
+      //         ],
+      //       },
+      //       {
+      //         value: "zuochuanjibian",
+      //         label: "佐川急便",
+      //         children: [
+      //           { value: "zuochuanzhaijibian", label: "宅急便" },
+      //           { value: "zuochuankongyun", label: "航空輸送" },
+      //         ],
+      //       },
+      //       {
+      //         value: "xinongyunshu",
+      //         label: "西濃運輸",
+      //         children: [
+      //           { value: "xinongkuaisu", label: "スピード便" },
+      //           { value: "xinongkongyun", label: "航空輸送" },
+      //         ],
+      //       },
+      //     ],
+      //   },
+      // ],
+      options:[],
     };
+  },
+  created() {
+    this.defaultShippingInformation();
+    this.fetchDeliveryMethods();
   },
   methods: {
     handleChange(value) {
@@ -258,6 +334,98 @@ export default {
     },
     back() {
       this.$emit("back");
+    },
+    validateExpiryDate(rule, value, callback) {
+      if (!value) {
+        return callback(new Error("有効期限を入力してください"));
+      }
+      const year = value.getFullYear();
+      const month = value.getMonth() + 1;
+      const currentDate = new Date();
+      const currentYear = currentDate.getFullYear();
+      const currentMonth = currentDate.getMonth() + 1;
+
+      if (
+        year < currentYear ||
+        (year === currentYear && month < currentMonth)
+      ) {
+        return callback(new Error("未来の年月を選択してください"));
+      }
+
+      callback();
+    },
+    defaultShippingInformation() {
+      console.log("defaultShippingInformation");
+      this.request
+        .get("/neworder/shippingandbilling", {
+          userId: "7",
+        })
+        .then((response) => {
+          console.log(response);
+          const res = response.data; // Assuming the response structure has the data in `response.data`
+          if (res && res.length > 0) {
+            const shippingInfo = res[0];
+            this.ruleForm.name = shippingInfo.name;
+            this.ruleForm.phone = shippingInfo.phone;
+            this.ruleForm.postCode = shippingInfo.post_code;
+            this.ruleForm.address = shippingInfo.address;
+          }
+        })
+        .catch((err) => {
+          console.error(err);
+          this.$message.error("无法获取默认配送信息");
+        });
+    },
+    fetchDeliveryMethods() {
+      console.log("fetchDeliveryMethods");
+      this.request
+        .get("/neworder/shippingandbilling/feach")
+        .then((response) => {
+          this.options = this.formatDeliveryMethods(response.data);
+          console.log(response);
+        })
+        .catch((error) => {
+          console.error("Error fetching delivery methods:", error);
+        });
+    },
+    formatDeliveryMethods(data) {
+      const formatted = [];
+      const regions = {};
+
+      data.forEach((item) => {
+        if (!regions[item.delivery_region]) {
+          regions[item.delivery_region] = {
+            value: item.delivery_region,
+            label: item.delivery_region,
+            children: [],
+          };
+        }
+
+        const region = regions[item.delivery_region];
+        if (!region.children.find((c) => c.value === item.delivery_company)) {
+          region.children.push({
+            value: item.delivery_company,
+            label: item.delivery_company,
+            children: [],
+          });
+        }
+
+        const company = region.children.find(
+          (c) => c.value === item.delivery_company
+        );
+        company.children.push({
+          value: item.delivery_method_name,
+          label: item.delivery_method_name,
+        });
+      });
+
+      for (const region in regions) {
+        formatted.push(regions[region]);
+      }
+      return formatted;
+      // console.log(JSON.stringify(formatted), "sb");
+      // this.options = formatted;
+      // console.log(JSON.stringify(this.options),"dsb");
     },
     getPaymentImage(payValue) {
       switch (payValue) {
