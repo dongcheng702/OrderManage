@@ -184,7 +184,7 @@
                 size="mini"
               ></el-button>
             </el-tooltip>
-            <el-tooltip content="再購入" placement="top" @click="reBuy">
+            <el-tooltip content="再購入" placement="top" @click-native="reBuy">
               <el-button
                 type="success"
                 icon="el-icon-goods"
@@ -205,13 +205,12 @@
             :total="total"
           ></el-pagination>
         </div>
-        <!-- 子组件OrderDetails，绑定isVisible属性并监听update:isVisible事件 -->
-        <OrderDetails
-          :isVisible="isDialogVisible"
-          @update:isVisible="updateDialogVisible"
-        ></OrderDetails>
+
+        <OrderDetails :isVisible.sync="isDialogVisible"></OrderDetails>
+
       </div>
     </div>
+
   </div>
 </template>
 
@@ -227,6 +226,7 @@ export default {
     const end = new Date(); // 当前日期
     const start = new Date(end.getFullYear(), end.getMonth() - 1, 1); // 上个月的第一天
     return {
+
       total: 0,
       pageNum: 1,
       pageSize: 5,
@@ -344,10 +344,6 @@ export default {
     },
     cancelOrder() {},
     reBuy() {},
-    // 更新 isDialogVisible 的方法
-    updateDialogVisible(newValue) {
-      this.isDialogVisible = newValue;
-    },
   },
 };
 </script>

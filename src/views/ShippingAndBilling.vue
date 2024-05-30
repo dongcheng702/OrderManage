@@ -225,13 +225,7 @@ export default {
           },
         ],
       },
-      payOptions: [
-        { value: "creditCard", label: "クレジットカード" },
-        { value: "PayPay", label: "PayPay" },
-        { value: "LinePay", label: "LinePay" },
-        { value: "WeChat", label: "WeChat" },
-        { value: "AliPay", label: "AliPay" },
-      ],
+      payOptions: [],
       // options: [
       //   {
       //     value: "haiwai",
@@ -307,12 +301,13 @@ export default {
       //     ],
       //   },
       // ],
-      options:[],
+      options: [],
     };
   },
   created() {
     this.defaultShippingInformation();
     this.fetchDeliveryMethods();
+    this.fetchPayMethods();
   },
   methods: {
     handleChange(value) {
@@ -389,6 +384,7 @@ export default {
         });
     },
     formatDeliveryMethods(data) {
+      console.log("formatDeliveryMethods");
       const formatted = [];
       const regions = {};
 
@@ -426,6 +422,30 @@ export default {
       // console.log(JSON.stringify(formatted), "sb");
       // this.options = formatted;
       // console.log(JSON.stringify(this.options),"dsb");
+    },
+    fetchPayMethods() {
+      console.log("fetchPayMethods");
+      this.request
+        .get("/neworder/shippingandbilling/feach2")
+        .then((response) => {
+          this.payOptions = this.formatPayMethods(response.data);
+        })
+        .catch((error) => {
+          console.log("Error fetching pay methods:", error);
+        });
+    },
+    
+    formatPayMethods(data) {
+      const payOption = {};
+      data.forEach((item) => {
+        if (!payOption[item.universal_name]) {
+          payOption[item.universal_name] = {
+            value: item.universal_name,
+            label: item.universal_name,
+          };
+        }
+      });
+      return payOption;
     },
     getPaymentImage(payValue) {
       switch (payValue) {
