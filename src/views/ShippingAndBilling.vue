@@ -232,82 +232,87 @@ export default {
         { value: "WeChat", label: "WeChat" },
         { value: "AliPay", label: "AliPay" },
       ],
-      options: [
-        {
-          value: "haiwai",
-          label: "海外",
-          children: [
-            {
-              value: "yamato",
-              label: "ヤマト運輸",
-              children: [
-                { value: "yamatohaiyun", label: "海上輸送" },
-                { value: "yamatokongyun", label: "航空輸送" },
-              ],
-            },
-            {
-              value: "youbianju",
-              label: "郵便局",
-              children: [
-                { value: "youbianjuhaiyun", label: "海上輸送" },
-                { value: "youbianjukongyun", label: "航空輸送" },
-              ],
-            },
-            {
-              value: "zuochuanjibian",
-              label: "佐川急便",
-              children: [{ value: "zuochuankongyun", label: "航空輸送" }],
-            },
-            {
-              value: "xinongyunshu",
-              label: "西濃運輸",
-              children: [{ value: "xinongkongyun", label: "航空輸送" }],
-            },
-          ],
-        },
-        {
-          value: "guonei",
-          label: "国内",
-          children: [
-            {
-              value: "yamato",
-              label: "ヤマト運輸",
-              children: [
-                { value: "yamatozhaijibian", label: "宅急便" },
-                { value: "yamatohaiyun", label: "海上輸送" },
-                { value: "yamatokongyun", label: "航空輸送" },
-              ],
-            },
-            {
-              value: "youbianju",
-              label: "郵便局",
-              children: [
-                { value: "youbianjuzhaijibian", label: "宅急便" },
-                { value: "youbianjukuaisu", label: "スピード便" },
-                { value: "youbianjuhaiyun", label: "海上輸送" },
-                { value: "youbianjukongyun", label: "航空輸送" },
-              ],
-            },
-            {
-              value: "zuochuanjibian",
-              label: "佐川急便",
-              children: [
-                { value: "zuochuanzhaijibian", label: "宅急便" },
-                { value: "zuochuankongyun", label: "航空輸送" },
-              ],
-            },
-            {
-              value: "xinongyunshu",
-              label: "西濃運輸",
-              children: [
-                { value: "xinongkuaisu", label: "スピード便" },
-                { value: "xinongkongyun", label: "航空輸送" },
-              ],
-            },
-          ],
-        },
-      ],
+      // options: [
+      //   {
+      //     value: "haiwai",
+      //     label: "海外",
+      //     children: [
+      //       {
+      //         value: "yamato",
+      //         label: "ヤマト運輸",
+      //         children: [
+      //           { value: "yamatohaiyun", label: "海上輸送" },
+      //           { value: "yamatokongyun", label: "航空輸送" },
+      //         ],
+      //       },
+      //       {
+      //         value: "youbianju",
+      //         label: "郵便局",
+      //         children: [
+      //           { value: "youbianjuhaiyun", label: "海上輸送" },
+      //           { value: "youbianjukongyun", label: "航空輸送" },
+      //         ],
+      //       },
+      //       {
+      //         value: "zuochuanjibian",
+      //         label: "佐川急便",
+      //         children: [{ value: "zuochuankongyun", label: "航空輸送" }],
+      //       },
+      //       {
+      //         value: "xinongyunshu",
+      //         label: "西濃運輸",
+      //         children: [{ value: "xinongkongyun", label: "航空輸送" }],
+      //       },
+      //     ],
+      //   },
+      //   {
+      //     value: "guonei",
+      //     label: "国内",
+      //     children: [
+      //       {
+      //         value: "yamato",
+      //         label: "ヤマト運輸",
+      //         children: [
+      //           { value: "yamatozhaijibian", label: "宅急便" },
+      //           { value: "yamatohaiyun", label: "海上輸送" },
+      //           { value: "yamatokongyun", label: "航空輸送" },
+      //         ],
+      //       },
+      //       {
+      //         value: "youbianju",
+      //         label: "郵便局",
+      //         children: [
+      //           { value: "youbianjuzhaijibian", label: "宅急便" },
+      //           { value: "youbianjukuaisu", label: "スピード便" },
+      //           { value: "youbianjuhaiyun", label: "海上輸送" },
+      //           { value: "youbianjukongyun", label: "航空輸送" },
+      //         ],
+      //       },
+      //       {
+      //         value: "zuochuanjibian",
+      //         label: "佐川急便",
+      //         children: [
+      //           { value: "zuochuanzhaijibian", label: "宅急便" },
+      //           { value: "zuochuankongyun", label: "航空輸送" },
+      //         ],
+      //       },
+      //       {
+      //         value: "xinongyunshu",
+      //         label: "西濃運輸",
+      //         children: [
+      //           { value: "xinongkuaisu", label: "スピード便" },
+      //           { value: "xinongkongyun", label: "航空輸送" },
+      //         ],
+      //       },
+      //     ],
+      //   },
+      // ],
+      options:[],
     };
+  },
+  created() {
+    this.defaultShippingInformation();
+    this.fetchDeliveryMethods();
   },
   methods: {
     handleChange(value) {
@@ -349,20 +354,93 @@ export default {
 
       callback();
     },
-    // getPaymentImage(payValue) {
-    //   switch (payValue) {
-    //     case "PayPay":
-    //       return require("@/img/AliPay.png");
-    //     case "LinePay":
-    //       return require("@/img/WeChat.jpg");
-    //     case "WeChat":
-    //       return require("@/img/WeChat.jpg");
-    //     case "AliPay":
-    //       return require("@/img/AliPay.png");
-    //     default:
-    //       return "";
-    //   }
-    // },
+    defaultShippingInformation() {
+      console.log("defaultShippingInformation");
+      this.request
+        .get("/neworder/shippingandbilling", {
+          userId: "7",
+        })
+        .then((response) => {
+          console.log(response);
+          const res = response.data; // Assuming the response structure has the data in `response.data`
+          if (res && res.length > 0) {
+            const shippingInfo = res[0];
+            this.ruleForm.name = shippingInfo.name;
+            this.ruleForm.phone = shippingInfo.phone;
+            this.ruleForm.postCode = shippingInfo.post_code;
+            this.ruleForm.address = shippingInfo.address;
+          }
+        })
+        .catch((err) => {
+          console.error(err);
+          this.$message.error("无法获取默认配送信息");
+        });
+    },
+    fetchDeliveryMethods() {
+      console.log("fetchDeliveryMethods");
+      this.request
+        .get("/neworder/shippingandbilling/feach")
+        .then((response) => {
+          this.options = this.formatDeliveryMethods(response.data);
+          console.log(response);
+        })
+        .catch((error) => {
+          console.error("Error fetching delivery methods:", error);
+        });
+    },
+    formatDeliveryMethods(data) {
+      const formatted = [];
+      const regions = {};
+
+      data.forEach((item) => {
+        if (!regions[item.delivery_region]) {
+          regions[item.delivery_region] = {
+            value: item.delivery_region,
+            label: item.delivery_region,
+            children: [],
+          };
+        }
+
+        const region = regions[item.delivery_region];
+        if (!region.children.find((c) => c.value === item.delivery_company)) {
+          region.children.push({
+            value: item.delivery_company,
+            label: item.delivery_company,
+            children: [],
+          });
+        }
+
+        const company = region.children.find(
+          (c) => c.value === item.delivery_company
+        );
+        company.children.push({
+          value: item.delivery_method_name,
+          label: item.delivery_method_name,
+        });
+      });
+
+      for (const region in regions) {
+        formatted.push(regions[region]);
+      }
+      return formatted;
+      // console.log(JSON.stringify(formatted), "sb");
+      // this.options = formatted;
+      // console.log(JSON.stringify(this.options),"dsb");
+    },
+    getPaymentImage(payValue) {
+      switch (payValue) {
+        case "PayPay":
+          return require("@/img/AliPay.png");
+        case "LinePay":
+          return require("@/img/WeChat.jpg");
+        case "WeChat":
+          return require("@/img/WeChat.jpg");
+        case "AliPay":
+          return require("@/img/AliPay.png");
+        default:
+          return "";
+      }
+    },
   },
 };
 </script>
