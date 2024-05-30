@@ -117,6 +117,7 @@
   </div>
 </template>
 
+
 <script>
 import OrderDetails from "@/views/OrderDetails.vue";
 import Payment from "./Payment.vue";
@@ -169,6 +170,7 @@ export default {
           },
         ],
       },
+
       items: [
         {
           orderNumber: "A001",
@@ -202,6 +204,7 @@ export default {
       ],
     };
   },
+  props: {},
   methods: {
     handleSelectionChange(val) {
       console.log(val);
@@ -209,13 +212,13 @@ export default {
     handleSizeChange(val) {
       /*传递过来当前是第几页*/
       console.log(`每页 ${val} 条`);
-      this.pageSize = val; // 获取当前每页显示条数
+      this.pageSize = val; //获取当前每页显示条数
       this.load();
     },
     handleCurrentChange(val) {
       /*传递过来当前是第几页*/
       console.log(`当前页: ${val}`);
-      this.pageNum = val; // 获取当前第几页
+      this.pageNum = val; //获取当前第几页
       this.load();
     },
     select() {
@@ -225,11 +228,10 @@ export default {
       console.log("reset");
     },
     newOrder() {
-      console.log("Attempting to navigate to NewOrder");
-      this.$router
-        .push({ name: "NewOrder" })
+      //console.log("Attempting to navigate to NewOrder");
+      this.$router.push({ name: "NewOrder" })
         .then(() => {
-          console.log("Navigation to NewOrder successful");
+          //console.log("Navigation to NewOrder successful");
         })
         .catch((error) => {
           console.error("Failed to navigate to NewOrder:", error);
@@ -237,11 +239,11 @@ export default {
     },
     expxlsx() {
       console.log("xlsx");
-      // window.open("http://localhost:8084/user/expxlsx");
+      //window.open("http://localhost:8084/user/expxlsx");
     },
     exppdf() {
       console.log("pdf");
-      // window.open("http://localhost:8084/user/exppdf");
+      //window.open("http://localhost:8084/user/exppdf");
     },
     Details() {
       console.log("Details");
@@ -260,3 +262,4 @@ export default {
   },
 };
 </script>
+

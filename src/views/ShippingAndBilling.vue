@@ -3,21 +3,21 @@
     <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm scrollable-form">
       <div class="section-title">ご配送：</div>
 
-      <el-form-item label="受取人氏名:" prop="name" class="inputBox">
-        <el-input v-model="ruleForm.name"></el-input>
-      </el-form-item>
+            <el-form-item label="受取人氏名:" prop="name" class="inputBox">
+                <el-input v-model="ruleForm.name"></el-input>
+            </el-form-item>
 
-      <el-form-item label="電話番号:" prop="postCode" class="inputBox">
-        <el-input v-model="ruleForm.phone"></el-input>
-      </el-form-item>
+            <el-form-item label="電話番号:" prop="postCode" class="inputBox">
+                <el-input v-model="ruleForm.phone"></el-input>
+            </el-form-item>
 
-      <el-form-item label="郵便番号:" prop="postCode" class="inputBox">
-        <el-input v-model="ruleForm.postCode"></el-input>
-      </el-form-item>
+            <el-form-item label="郵便番号:" prop="postCode" class="inputBox">
+                <el-input v-model="ruleForm.postCode"></el-input>
+            </el-form-item>
 
-      <el-form-item label="住所:" prop="address" class="inputBox">
-        <el-input v-model="ruleForm.address" style="width: 500px"></el-input>
-      </el-form-item>
+            <el-form-item label="住所:" prop="address" class="inputBox">
+                <el-input v-model="ruleForm.address" style="width: 500px"></el-input>
+            </el-form-item>
 
       <el-form-item label="配送方法:" prop="deliveryMethod" class="inputBox">
         <el-cascader placeholder="配送方法を選択してください" v-model="ruleForm.deliveryMethod" :options="options"
@@ -25,7 +25,7 @@
           aria-required="true"></el-cascader>
       </el-form-item>
 
-      <div class="section-title">支払方法を選択してください</div>
+            <div class="section-title">支払方法を選択してください</div>
 
       <el-form-item label="支払方法" prop="payValue" class="inputBox">
         <el-select v-model="ruleForm.payValue" placeholder="支払方法" class="dropDownBox" @change="handlePayChange"
@@ -44,10 +44,10 @@
             placeholder="選択してください"></el-date-picker>
         </el-form-item>
 
-        <el-form-item label="CVV" prop="cvv" class="inputBox">
-          <el-input v-model="ruleForm.cvv" style="width: 100px"></el-input>
-        </el-form-item>
-      </template>
+                <el-form-item label="CVV" prop="cvv" class="inputBox">
+                    <el-input v-model="ruleForm.cvv" style="width: 100px"></el-input>
+                </el-form-item>
+            </template>
 
       <template v-else-if="
         ['PayPay', 'LinePay', 'WeChat', 'AliPay'].includes(ruleForm.payValue)
@@ -55,23 +55,23 @@
         <el-form-item label="スキャン" class="inputBox">
           <img :src="getPaymentImage(ruleForm.payValue)" :alt="ruleForm.payValue + ' QRコード'" class="payment-qr-code" />
         </el-form-item>
-      </template>
-    </el-form>
+      </template> -->
+        </el-form>
 
-    <div class="form-buttons">
-      <el-button type="primary" @click="back">戻る</el-button>
-      <el-button type="primary" @click="next">次の手順</el-button>
+        <div class="form-buttons">
+            <el-button type="primary" @click="back">戻る</el-button>
+            <el-button type="primary" @click="next">次の手順</el-button>
+        </div>
     </div>
-  </div>
 </template>
 <script>
 export default {
-  name: "OrderList",
-  data() {
-    return {
-      returnData: "",
-      deliveryData: "",
-      value: [],
+    name: "OrderList",
+    data() {
+        return {
+            returnData: "",
+            deliveryData: "",
+            value: [],
 
       ruleForm: {
         name: "",
@@ -306,146 +306,74 @@ export default {
       const currentYear = currentDate.getFullYear();
       const currentMonth = currentDate.getMonth() + 1;
 
-      if (
-        year < currentYear ||
-        (year === currentYear && month < currentMonth)
-      ) {
-        return callback(new Error("未来の年月を選択してください"));
-      }
+            if (
+                year < currentYear ||
+                (year === currentYear && month < currentMonth)
+            ) {
+                return callback(new error("有効期限は未来の年月を選択してください"));
+            };
 
-      callback();
+            callback();
+        },
+        // getPaymentImage(payValue) {
+        //   switch (payValue) {
+        //     case "PayPay":
+        //       return require("@/img/AliPay.png");
+        //     case "LinePay":
+        //       return require("@/img/WeChat.jpg");
+        //     case "WeChat":
+        //       return require("@/img/WeChat.jpg");
+        //     case "AliPay":
+        //       return require("@/img/AliPay.png");
+        //     default:
+        //       return "";
+        //   }
+        // },
     },
-    defaultShippingInformation() {
-      console.log("defaultShippingInformation");
-      this.request
-        .get("/neworder/shippingandbilling", {
-          userId: "7",
-        })
-        .then((response) => {
-          console.log(response);
-          const res = response.data; // Assuming the response structure has the data in `response.data`
-          if (res && res.length > 0) {
-            const shippingInfo = res[0];
-            this.ruleForm.name = shippingInfo.name;
-            this.ruleForm.phone = shippingInfo.phone;
-            this.ruleForm.postCode = shippingInfo.post_code;
-            this.ruleForm.address = shippingInfo.address;
-          }
-        })
-        .catch((err) => {
-          console.error(err);
-          this.$message.error("无法获取默认配送信息");
-        });
-    },
-    fetchDeliveryMethods() {
-      console.log("fetchDeliveryMethods");
-      this.request
-        .get("/neworder/shippingandbilling/feach")
-        .then((response) => {
-          this.options = this.formatDeliveryMethods(response.data);
-          console.log(response);
-        })
-        .catch((error) => {
-          console.error("Error fetching delivery methods:", error);
-        });
-    },
-    formatDeliveryMethods(data) {
-      const formatted = [];
-      const regions = {};
-
-      data.forEach((item) => {
-        if (!regions[item.delivery_region]) {
-          regions[item.delivery_region] = {
-            value: item.delivery_region,
-            label: item.delivery_region,
-            children: [],
-          };
-        }
-
-        const region = regions[item.delivery_region];
-        if (!region.children.find((c) => c.value === item.delivery_company)) {
-          region.children.push({
-            value: item.delivery_company,
-            label: item.delivery_company,
-            children: [],
-          });
-        }
-
-        const company = region.children.find(
-          (c) => c.value === item.delivery_company
-        );
-        company.children.push({
-          value: item.delivery_method_name,
-          label: item.delivery_method_name,
-        });
-      });
-
-      for (const region in regions) {
-        formatted.push(regions[region]);
-      }
-      return formatted;
-      // console.log(JSON.stringify(formatted), "sb");
-      // this.options = formatted;
-      // console.log(JSON.stringify(this.options),"dsb");
-    },
-    getPaymentImage(payValue) {
-      switch (payValue) {
-        case "PayPay":
-          return require("@/img/AliPay.png");
-        case "LinePay":
-          return require("@/img/WeChat.jpg");
-        case "WeChat":
-          return require("@/img/WeChat.jpg");
-        case "AliPay":
-          return require("@/img/AliPay.png");
-        default:
-          return "";
-      }
-    },
-  },
 };
 </script>
 <style>
 .scrollable-form {
-  height: 700px;
-  /* 设置一个固定高度 */
-  overflow-y: auto;
-  /* 允许垂直方向上的滚动 */
-  margin: 0 auto;
-  width: 50%;
+    height: 700px;
+    /* 设置一个固定高度 */
+    overflow-y: auto;
+    /* 允许垂直方向上的滚动 */
+    margin: 0 auto;
+    width: 50%;
 }
 
 .dropDownBox {
-  display: flex;
-  justify-content: flex-start;
-  width: 200px;
+    display: flex;
+    justify-content: flex-start;
+    width: 200px;
 }
 
 .inputBox {
-  text-align: left;
-  margin-top: 30px;
-  margin-bottom: 30px;
-  width: 300px;
+    text-align: left;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    width: 300px;
 }
 
 .section-title {
-  text-align: left;
-  margin-top: 30px;
-  margin-bottom: 10px;
-  font-weight: bold;
+    text-align: left;
+    margin-top: 30px;
+    margin-bottom: 10px;
+    font-weight: bold;
 }
 
 .payment-qr-code {
-  width: 40%;
-  display: flex;
-  justify-content: flex-start;
+    width: 40%;
+    display: flex;
+    justify-content: flex-start;
 }
 
 .form-buttons {
-  position: fixed;
-  bottom: 0;
-  right: 0;
-  margin-right: 50px;
-  margin-bottom: 50px;
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    margin-right: 50px;
+    margin-bottom: 50px;
 }
 </style>
+

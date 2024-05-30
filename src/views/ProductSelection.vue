@@ -93,6 +93,7 @@
 
 
 <script>
+const baseURL = "http://localhost:9090/neworder/productselection/";
 export default {
   name: "OrderList",
   data() {
@@ -187,3 +188,4 @@ export default {
   },
 };
 </script>
+
