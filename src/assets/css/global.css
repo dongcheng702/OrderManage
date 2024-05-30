@@ -50,12 +50,6 @@ nav a.router-link-exact-active {
   padding: 10px 0;
 }
 
-/*靠左向下缩进20px */
-.indent-top {
-  margin-top: 20px;
-  text-align: left;
-}
-
 /* Login */
 .login{
   display: flex;
@@ -65,4 +59,3 @@ nav a.router-link-exact-active {
   height: 100vh;
   overflow: hidden;
 }
-
