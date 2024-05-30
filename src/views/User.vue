@@ -7,21 +7,10 @@
         start-placeholder="開始日付" end-placeholder="終了日付" :picker-options="pickerOptions" style="margin-left: 30px"
         :default-value="defaultMonthDate">
       </el-date-picker>
-
-      <el-dropdown>
-        <el-button style="margin-left: 30px">
-          注文状況<i class="el-icon-arrow-down el-icon--right"></i>
-        </el-button>
-        <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item>受取</el-dropdown-item>
-          <el-dropdown-item>配送中</el-dropdown-item>
-          <el-dropdown-item>在庫保留</el-dropdown-item>
-          <el-dropdown-item>営業確認中</el-dropdown-item>
-          <el-dropdown-item>部長確認中</el-dropdown-item>
-          <el-dropdown-item>キャンセル中</el-dropdown-item>
-          <el-dropdown-item>キャンセル済み</el-dropdown-item>
-        </el-dropdown-menu>
-      </el-dropdown>
+      <el-select v-model="orderstatus" placeholder="注文状況" style="margin-left: 30px;width: 150px;">
+        <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+        </el-option>
+      </el-select>
     </div>
     <el-row>
       <el-button type="success" @click="select" style="transform: translateX(10px)">検索<i class="el-icon-search"
@@ -46,7 +35,7 @@
       <el-table :data="items" border stripe :header-cell-style="{ background: '#eee' }"
         @selection-change="handleSelectionChange">
         <el-table-column type="selection"> </el-table-column>
-        <el-table-column prop="orderNumber" label="注文番号" min-width="10%" header-align="center">
+        <el-table-column prop="orderNumber" label="注文ID" min-width="10%" header-align="center">
         </el-table-column>
         <el-table-column prop="orderDate" label="注文日" min-width="10%" align="center" header-align="center">
         </el-table-column>
@@ -90,13 +79,13 @@
           </template>
         </el-table-column>
         <el-table-column prop="test" label="操作" min-width="10%" align="center">
-          <el-tooltip content="編集" placement="top" @click="editOrder">
+          <el-tooltip content="注文明細" placement="top" @click.native="reBuy">
             <el-button type="primary" icon="el-icon-edit" circle size="mini"></el-button>
           </el-tooltip>
-          <el-tooltip content="キャメル" placement="top" @click="cancelOrder">
+          <el-tooltip content="キャンセル" placement="top" @click.native="cancelOrder">
             <el-button type="danger" icon="el-icon-s-release" circle size="mini"></el-button>
           </el-tooltip>
-          <el-tooltip content="再購入" placement="top" @click="reBuy">
+          <el-tooltip content="支払" placement="top" @click.native="payment">
             <el-button type="success" icon="el-icon-goods" circle size="mini"></el-button>
           </el-tooltip>
         </el-table-column>
@@ -108,13 +97,20 @@
         </el-pagination>
       </div>
     </div>
+    <Payment :dialogTableVisible.sync="dialogTableVisible" />
   </div>
 </template>
 
 
 <script>
+import Payment from './Payment.vue';
+
 export default {
   name: "User",
+  components: {
+    Payment
+
+  },
   data() {
     const end = new Date(); // 当前日期
     const start = new Date(end.getFullYear(), end.getMonth() - 1, 1); // 上个月的第一天
@@ -187,15 +183,37 @@ export default {
         },
       ],
       value2: "",
+      dialogTableVisible: false,
+      flag: false,
+      orderstatus: "",
+      options: [{
+        value: '选项1',
+        label: '受取'
+      }, {
+        value: '选项2',
+        label: '配送中'
+      }, {
+        value: '选项3',
+        label: '在庫保留'
+      }, {
+        value: '选项4',
+        label: '営業確認中'
+      }, {
+        value: '选项5',
+        label: '部長確認中'
+      }, {
+        value: '选项6',
+        label: 'キャンセル中'
+      }, {
+        value: '选项7',
+        label: 'キャンセル済み'
+      }],
     };
   },
   props: {},
   methods: {
     handleSelectionChange(val) {
       console.log(val);
-    },
-    edit(row) {
-      console.log(row);
     },
     handleSizeChange(val) {
       /*传递过来当前是第几页*/
@@ -216,8 +234,14 @@ export default {
       console.log("reset");
     },
     newOrder() {
-      console.log("newOrder");
-      this.$router.push({ name: "NewOrder" });
+      //console.log("Attempting to navigate to NewOrder");
+      this.$router.push({ name: "NewOrder" })
+        .then(() => {
+          //console.log("Navigation to NewOrder successful");
+        })
+        .catch((error) => {
+          console.error("Failed to navigate to NewOrder:", error);
+        });
     },
     expxlsx() {
       console.log("xlsx");
@@ -227,9 +251,17 @@ export default {
       console.log("pdf");
       //window.open("http://localhost:8084/user/exppdf");
     },
-    editOrder() { },
-    cancelOrder() { },
-    reBuy() { },
+
+    cancelOrder() {
+      console.log("cancelOrder")
+    },
+    reBuy() {
+      console.log("reBuy")
+    },
+    payment() {
+      console.log("Payment")
+      this.dialogTableVisible = !this.dialogTableVisible;
+    },
   },
 };
 </script>
