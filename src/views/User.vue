@@ -51,7 +51,12 @@
         <el-table :data="items" border stripe :header-cell-style="{ background: '#eee' }"
           @selection-change="handleSelectionChange">
           <el-table-column type="selection"> </el-table-column>
-          <el-table-column prop="orderNumber" label="注文ID" min-width="10%" header-align="center"></el-table-column>
+          <el-table-column prop="orderNumber" label="注文ID" min-width="10%" header-align="center">
+            <template slot-scope="scope">
+            <el-link type="primary" @click="Details()">{{ scope.row.orderNumber }}</el-link>
+          </template>
+          </el-table-column>
+        
           <el-table-column prop="orderDate" label="注文日" min-width="10%" align="center"
             header-align="center"></el-table-column>
           <el-table-column prop="orderQuantity" label="注文数量" min-width="10%" align="right"
@@ -99,7 +104,7 @@
             <el-tooltip content="キャンセル" placement="top" @click="cancelOrder">
               <el-button type="danger" icon="el-icon-s-release" circle size="mini"></el-button>
             </el-tooltip>
-            <el-tooltip content="支払" placement="top" @click.native="payment">
+            <el-tooltip content="支払い" placement="top" @click.native="payment">
               <el-button type="success" icon="el-icon-goods" circle size="mini"></el-button>
             </el-tooltip>
           </el-table-column>
@@ -115,6 +120,7 @@
     </div>
     <Payment :dialogTableVisible.sync="dialogTableVisible" ref="payment"/>
   </div>
+
 </template>
 
 

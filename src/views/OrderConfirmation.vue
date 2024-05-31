@@ -43,11 +43,6 @@
           <el-button v-if="showBackButton" type="primary" @click="back">戻る</el-button>
           <el-button type="primary" @click="next">確定</el-button>
       </div>
-
-      <div style="position: fixed;bottom: 0;right: 0;margin-right: 50px;margin-bottom: 50px;">
-          <el-button v-if="showBackButton" type="primary" @click="back">戻る</el-button>
-          <el-button type="primary" @click="next">確定</el-button>
-      </div>
   </div>
 </template>
 
@@ -64,7 +59,7 @@ export default {
           drawer: false,
           direction: 'rtl',
           form:{
-              orderId:1
+              orderId:2
           },
           tableData: []
       }
