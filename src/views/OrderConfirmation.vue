@@ -88,7 +88,7 @@
 
 <script>
 export default {
-  name: "OrderList",
+  name: "OrderConfirmation",
   data() {
     return {
       showBackButton: true, // 控制是否显示 "戻る" 按钮的变量

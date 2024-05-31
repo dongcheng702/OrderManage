@@ -87,7 +87,14 @@
             label="注文ID"
             min-width="10%"
             header-align="center"
-          ></el-table-column>
+          >
+            <template slot-scope="scope">
+              <el-link type="primary" @click="Details(scope.row.orderNumber)">
+                {{ scope.row.orderNumber }}
+              </el-link>
+            </template>
+          </el-table-column>
+
           <el-table-column
             prop="orderDate"
             label="注文日"
@@ -207,16 +214,14 @@
         </div>
 
         <OrderDetails :isVisible.sync="isDialogVisible"></OrderDetails>
-
       </div>
     </div>
-
   </div>
 </template>
 
 <script>
 import OrderDetails from "@/views/OrderDetails.vue";
-
+import { EventBus } from "@/eventBus";
 export default {
   name: "User",
   components: {
@@ -226,7 +231,6 @@ export default {
     const end = new Date(); // 当前日期
     const start = new Date(end.getFullYear(), end.getMonth() - 1, 1); // 上个月的第一天
     return {
-
       total: 0,
       pageNum: 1,
       pageSize: 5,
@@ -265,7 +269,7 @@ export default {
       },
       items: [
         {
-          orderNumber: "A001",
+          orderNumber: "1",
           orderDate: "2024年5月9日",
           orderQuantity: "1000個",
           totalPrice: 999,
@@ -275,7 +279,7 @@ export default {
           deliveryMethod: "ヤマト運輸",
         },
         {
-          orderNumber: "A002",
+          orderNumber: "2",
           orderDate: "2024年5月10日",
           orderQuantity: "1001個",
           totalPrice: 999,
@@ -285,7 +289,7 @@ export default {
           deliveryMethod: "郵便局",
         },
         {
-          orderNumber: "A003",
+          orderNumber: "3",
           orderDate: "2024年5月11日",
           orderQuantity: "1002個",
           totalPrice: 999,
@@ -338,9 +342,10 @@ export default {
       console.log("pdf");
       // window.open("http://localhost:8084/user/exppdf");
     },
-    Details() {
-      console.log("Details");
+    Details(orderNumber) {
+      console.log("Details", orderNumber);
       this.isDialogVisible = true; // 打开对话框
+      EventBus.$emit("sendOrderNumber", orderNumber);
     },
     cancelOrder() {},
     reBuy() {},

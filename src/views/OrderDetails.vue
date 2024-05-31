@@ -3,7 +3,7 @@
   <!-- 绑定本地变量 localVisible -->
   <div>
     <el-dialog
-      :visible="isVisible"
+      :visible.sync="isVisible"
       width="65%"
       @close="closeDialog"
       text-align:center
@@ -11,22 +11,18 @@
       <template #title>
         <div style="text-align: center; width: 100%">注文明細</div>
       </template>
-      <span>注文ID:{{ orderId }}</span>
+      <span>注文ID:{{ orderNumber }}</span>
 
       <el-table :data="tableData" style="width: 100%; margin-top: 10px">
         <el-table-column
-          prop="productName"
+          prop="product_name"
           label="商品名"
           style="min-width: 16%"
         >
         </el-table-column>
         <el-table-column prop="origin" label="産地" style="min-width: 16%">
         </el-table-column>
-        <el-table-column
-          prop="specification"
-          label="規格"
-          style="min-width: 16%"
-        >
+        <el-table-column prop="standard" label="規格" style="min-width: 16%">
         </el-table-column>
         <el-table-column
           prop="quantity"
@@ -34,25 +30,26 @@
           style="min-width: 16%"
         >
         </el-table-column>
-        <el-table-column prop="unitPrice" label="単価" style="min-width: 16%">
+        <el-table-column prop="unit_price" label="単価" style="min-width: 16%">
         </el-table-column>
         <el-table-column
-          prop="totalPrice"
+          prop="item_total"
           label="単品合計金額"
           style="min-width: 16%"
         >
         </el-table-column>
       </el-table>
-      <span
-        >合計で{{ productTypeCount }}種類の商品を購入し、総額は{{
-          amountSum
-        }}円です。</span
-      >
+      <div style="text-align: right; width: 100%">
+        合計で<el-tag size="small">{{ product_type_count }}</el-tag
+        >種類の商品を購入し、総額は<el-tag size="small">{{ amount_sum }}</el-tag
+        >円です。
+      </div>
     </el-dialog>
   </div>
 </template>
 
 <script>
+import { EventBus } from "../eventBus";
 export default {
   name: "OrderDetails",
   props: {
@@ -63,31 +60,40 @@ export default {
   },
   data() {
     return {
-      tableData: [
-        {
-          productName: "商品1",
-          origin: "中国",
-          specification: "规格1",
-          quantity: 10,
-          unitPrice: 100,
-          totalPrice: 1000,
-        },
-        {
-          productName: "商品2",
-          origin: "日本",
-          specification: "规格2",
-          quantity: 20,
-          unitPrice: 200,
-          totalPrice: 4000,
-        },
-      ],
+      orderNumber: "",
+      tableData: [],
+      product_type_count: 0,
+      amount_sum: 0,
     };
+  },
+
+  created() {
+    EventBus.$on("sendOrderNumber", this.sendOrderId);
   },
 
   methods: {
     closeDialog() {
       console.log("closeDialog");
       this.$emit("update:isVisible", false);
+    },
+    sendOrderId(orderNumber) {
+      console.log("sendOrderId", orderNumber);
+      this.orderNumber = orderNumber;
+      this.tableData = this.feachOrderDetails(orderNumber);
+    },
+    feachOrderDetails(orderNumber) {
+      console.log("feachOrderDetails", orderNumber);
+      this.request
+        .get("/user/feach", { orderNumber })
+        .then((response) => {
+          console.log(JSON.stringify(response.data[0].amount_sum, null, 2));
+          this.tableData = response.data;
+          this.amount_sum = response.data[0].amount_sum;
+          this.product_type_count = response.data[0].product_type_count;
+        })
+        .catch((error) => {
+          console.error("Error fetching order details:", error);
+        });
     },
   },
 };

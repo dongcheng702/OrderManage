@@ -13,7 +13,7 @@
         <el-input v-model="ruleForm.name"></el-input>
       </el-form-item>
 
-      <el-form-item label="電話番号:" prop="postCode" class="inputBox">
+      <el-form-item label="電話番号:" prop="phone" class="inputBox">
         <el-input v-model="ruleForm.phone"></el-input>
       </el-form-item>
 
@@ -103,22 +103,18 @@
     </div>
   </div>
 </template>
+
 <script>
 export default {
-  name: "OrderList",
+  name: "ShippingAndBilling",
   data() {
     return {
-      returnData: "",
-      deliveryData: "",
-      value: [],
-
       ruleForm: {
         name: "",
-        postCode: "",
         phone: "",
+        postCode: "",
         address: "",
         deliveryMethod: null,
-        delivery: false,
         payValue: "",
         creditCardNumber: null,
         expiryDate: "",
@@ -134,7 +130,7 @@ export default {
           {
             min: 1,
             max: 20,
-            message: "入力値の範囲は1から50まで",
+            message: "入力値の範囲は1から20まで",
             trigger: "blur",
           },
         ],
@@ -210,12 +206,7 @@ export default {
             trigger: "blur",
           },
         ],
-        expiryDate: [
-          {
-            validator: this.validateExpiryDate,
-            trigger: "blur",
-          },
-        ],
+        expiryDate: [{ validator: this.validateExpiryDate, trigger: "blur" }],
         cvv: [
           { required: true, message: "CVVを入力してください", trigger: "blur" },
           {
@@ -225,83 +216,8 @@ export default {
           },
         ],
       },
-      payOptions: [],
-      // options: [
-      //   {
-      //     value: "haiwai",
-      //     label: "海外",
-      //     children: [
-      //       {
-      //         value: "yamato",
-      //         label: "ヤマト運輸",
-      //         children: [
-      //           { value: "yamatohaiyun", label: "海上輸送" },
-      //           { value: "yamatokongyun", label: "航空輸送" },
-      //         ],
-      //       },
-      //       {
-      //         value: "youbianju",
-      //         label: "郵便局",
-      //         children: [
-      //           { value: "youbianjuhaiyun", label: "海上輸送" },
-      //           { value: "youbianjukongyun", label: "航空輸送" },
-      //         ],
-      //       },
-      //       {
-      //         value: "zuochuanjibian",
-      //         label: "佐川急便",
-      //         children: [{ value: "zuochuankongyun", label: "航空輸送" }],
-      //       },
-      //       {
-      //         value: "xinongyunshu",
-      //         label: "西濃運輸",
-      //         children: [{ value: "xinongkongyun", label: "航空輸送" }],
-      //       },
-      //     ],
-      //   },
-      //   {
-      //     value: "guonei",
-      //     label: "国内",
-      //     children: [
-      //       {
-      //         value: "yamato",
-      //         label: "ヤマト運輸",
-      //         children: [
-      //           { value: "yamatozhaijibian", label: "宅急便" },
-      //           { value: "yamatohaiyun", label: "海上輸送" },
-      //           { value: "yamatokongyun", label: "航空輸送" },
-      //         ],
-      //       },
-      //       {
-      //         value: "youbianju",
-      //         label: "郵便局",
-      //         children: [
-      //           { value: "youbianjuzhaijibian", label: "宅急便" },
-      //           { value: "youbianjukuaisu", label: "スピード便" },
-      //           { value: "youbianjuhaiyun", label: "海上輸送" },
-      //           { value: "youbianjukongyun", label: "航空輸送" },
-      //         ],
-      //       },
-      //       {
-      //         value: "zuochuanjibian",
-      //         label: "佐川急便",
-      //         children: [
-      //           { value: "zuochuanzhaijibian", label: "宅急便" },
-      //           { value: "zuochuankongyun", label: "航空輸送" },
-      //         ],
-      //       },
-      //       {
-      //         value: "xinongyunshu",
-      //         label: "西濃運輸",
-      //         children: [
-      //           { value: "xinongkuaisu", label: "スピード便" },
-      //           { value: "xinongkongyun", label: "航空輸送" },
-      //         ],
-      //       },
-      //     ],
-      //   },
-      // ],
       options: [],
+      payOptions: [],
     };
   },
   created() {
@@ -311,10 +227,11 @@ export default {
   },
   methods: {
     handleChange(value) {
-      this.deliveryData = value;
+      this.ruleForm.deliveryMethod = value;
       this.$refs.ruleForm.validateField("deliveryMethod");
     },
     handlePayChange(value) {
+      this.ruleForm.payValue = value;
       this.$refs.ruleForm.validateField("payValue");
     },
     validateDeliveryMethod() {
@@ -324,8 +241,7 @@ export default {
       this.$refs.ruleForm.validateField("payValue");
     },
     next() {
-      this.returnData = `${this.data}->ShippingAndBilling(${this.deliveryData})`;
-      this.$emit("next", this.returnData);
+      this.$emit("next", this.ruleForm);
     },
     back() {
       this.$emit("back");
@@ -350,14 +266,10 @@ export default {
       callback();
     },
     defaultShippingInformation() {
-      console.log("defaultShippingInformation");
       this.request
-        .get("/neworder/shippingandbilling", {
-          userId: "7",
-        })
+        .get("/neworder/shippingandbilling", { userId: "7" })
         .then((response) => {
-          console.log(response);
-          const res = response.data; // Assuming the response structure has the data in `response.data`
+          const res = response.data;
           if (res && res.length > 0) {
             const shippingInfo = res[0];
             this.ruleForm.name = shippingInfo.name;
@@ -367,25 +279,20 @@ export default {
           }
         })
         .catch((err) => {
-          console.error(err);
           this.$message.error("无法获取默认配送信息");
         });
     },
     fetchDeliveryMethods() {
-      console.log("fetchDeliveryMethods");
       this.request
         .get("/neworder/shippingandbilling/feach")
         .then((response) => {
           this.options = this.formatDeliveryMethods(response.data);
-          console.log(response);
         })
         .catch((error) => {
           console.error("Error fetching delivery methods:", error);
         });
     },
     formatDeliveryMethods(data) {
-      console.log("formatDeliveryMethods");
-      const formatted = [];
       const regions = {};
 
       data.forEach((item) => {
@@ -415,96 +322,77 @@ export default {
         });
       });
 
-      for (const region in regions) {
-        formatted.push(regions[region]);
-      }
-      return formatted;
-      // console.log(JSON.stringify(formatted), "sb");
-      // this.options = formatted;
-      // console.log(JSON.stringify(this.options),"dsb");
+      return Object.values(regions);
     },
     fetchPayMethods() {
-      console.log("fetchPayMethods");
       this.request
         .get("/neworder/shippingandbilling/feach2")
         .then((response) => {
           this.payOptions = this.formatPayMethods(response.data);
         })
         .catch((error) => {
-          console.log("Error fetching pay methods:", error);
+          console.error("Error fetching pay methods:", error);
         });
     },
-    
     formatPayMethods(data) {
-      const payOption = {};
+      const payOptions = {};
+
       data.forEach((item) => {
-        if (!payOption[item.universal_name]) {
-          payOption[item.universal_name] = {
+        if (!payOptions[item.universal_name]) {
+          payOptions[item.universal_name] = {
             value: item.universal_name,
             label: item.universal_name,
           };
         }
       });
-      return payOption;
+
+      return Object.values(payOptions);
     },
     getPaymentImage(payValue) {
-      switch (payValue) {
-        case "PayPay":
-          return require("@/img/AliPay.png");
-        case "LinePay":
-          return require("@/img/WeChat.jpg");
-        case "WeChat":
-          return require("@/img/WeChat.jpg");
-        case "AliPay":
-          return require("@/img/AliPay.png");
-        default:
-          return "";
-      }
+      const images = {
+        PayPay: require("@/img/AliPay.png"),
+        LinePay: require("@/img/WeChat.jpg"),
+        WeChat: require("@/img/WeChat.jpg"),
+        AliPay: require("@/img/AliPay.png"),
+      };
+      return images[payValue] || "";
     },
   },
 };
 </script>
+
 <style>
 .scrollable-form {
   height: 700px;
-  /* 设置一个固定高度 */
   overflow-y: auto;
-  /* 允许垂直方向上的滚动 */
   margin: 0 auto;
   width: 50%;
 }
 
 .dropDownBox {
-  display: flex;
-  justify-content: flex-start;
   width: 200px;
 }
 
 .inputBox {
   text-align: left;
-  margin-top: 30px;
-  margin-bottom: 30px;
+  margin: 30px 0;
   width: 300px;
 }
 
 .section-title {
   text-align: left;
-  margin-top: 30px;
-  margin-bottom: 10px;
+  margin: 30px 0 10px;
   font-weight: bold;
 }
 
 .payment-qr-code {
   width: 40%;
-  display: flex;
-  justify-content: flex-start;
 }
 
 .form-buttons {
   position: fixed;
   bottom: 0;
   right: 0;
-  margin-right: 50px;
-  margin-bottom: 50px;
+  margin: 50px;
 }
 </style>
