@@ -12,11 +12,8 @@
                 <el-form-item label="変更後金額:">
                     <el-tag size="small" class="same-width">{{ totalPrice.toLocaleString() }}</el-tag>
                 </el-form-item>
-                <el-form-item label="支払方法">
-                    <el-select v-model="form.region" placeholder="支払方法をお選びください" class="same-width">
-                        <el-option label="クレジットカード" value="shanghai"></el-option>
-                        <el-option label="PayPay" value="beijing"></el-option>
-                    </el-select>
+                <el-form-item label="支払方法:">
+                    <el-tag size="small" class="same-width">{{ UniversalName }}</el-tag>
                 </el-form-item>
                 <el-button type="success" @click="Confirm" style="float: right;margin-top: -20px">確定</el-button>
             </el-form>
@@ -37,6 +34,7 @@ export default {
             labelPosition: 'top',
             amountSum: 0,
             totalPrice: 0,
+            UniversalName: '',
             name: '',
             ko: '',
             region: '',
@@ -61,6 +59,7 @@ export default {
                     this.amountSum = response.data.amountSum;
                     this.totalPrice = response.data.totalPrice;
                     this.orderId = response.data.orderId;
+                    this.UniversalName = response.data.universalName;
                 })
                 .catch(error => {
                     console.error('请求失败:', error);
