@@ -35,9 +35,6 @@ export default {
             amountSum: 0,
             totalPrice: 0,
             UniversalName: '',
-            name: '',
-            ko: '',
-            region: '',
             form: {
                 orderId: 2
             }
