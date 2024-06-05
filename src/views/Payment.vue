@@ -27,6 +27,7 @@ export default {
     name: 'Payment',
     props: {
         dialogTableVisible: Boolean,
+        orderId : [String,Number]
     },
     data() {
         return {
@@ -36,7 +37,7 @@ export default {
             totalPrice: 0,
             UniversalName: '',
             form: {
-                orderId: 2
+                orderId : null
             }
         };
     },
@@ -50,12 +51,11 @@ export default {
     },
     methods: {
         fetchData() {
-            this.request.post('/neworder/OrderConfirmation/payment', this.form)
+            this.request.post('/neworder/OrderConfirmation/payment', { orderId: this.orderId })
                 .then(response => {
                     console.log(response);
                     this.amountSum = response.data.amountSum;
                     this.totalPrice = response.data.totalPrice;
-                    this.orderId = response.data.orderId;
                     this.UniversalName = response.data.universalName;
                 })
                 .catch(error => {

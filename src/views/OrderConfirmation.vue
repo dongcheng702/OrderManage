@@ -1,9 +1,10 @@
 <template>
     <div style="margin-top: 50px;">
-        <el-table :data="tableData.results" border stripe style="width: 100%" :header-cell-style="{ background: '#eee' }">
+        <el-table :data="tableData.results" border stripe style="width: 100%"
+            :header-cell-style="{ background: '#eee' }">
             <el-table-column prop="productName" label="商品名" width="180" align="center">
             </el-table-column>
-            <el-table-column prop="selling_price" label="販売価格" width="180" align="right">
+            <el-table-column prop="unitPrice" label="販売価格" width="180" align="right">
             </el-table-column>
             <el-table-column prop="quantity" label="購入数量" align="right">
             </el-table-column>
@@ -58,8 +59,9 @@ export default {
             pageSize: 5,
             drawer: false,
             direction: 'rtl',
+            result : 0,
             form: {
-                orderId: 2,
+                orderId: this.orderId,
                 recipientName: this.ruleForm.name,
                 postCode: this.ruleForm.postCode,
                 destination: this.ruleForm.address,
@@ -72,9 +74,10 @@ export default {
     },
     props: {
         ruleForm: Object,
-        id: Number,
+        orderId: Number,
     },
     mounted() {
+        console.log(this.orderId,1);
         this.fetchData();
     },
     methods: {
@@ -83,10 +86,11 @@ export default {
                 .then(response => {
                     console.log(response);
                     this.tableData = response.data;
-                    if (response.data[0].message === '' || response.data[0].message === null) {
-                        console.log(response.data[0].message);
+                    if (response.data.message === '' || response.data.message === null) {
+                        console.log(response.data.message);
+                        this.result = 1;
                     } else {
-                        this.$message.error(response.data[0].message);
+                        this.$message.error(response.data.message);
                     }
                 })
                 .catch(error => {
@@ -97,6 +101,20 @@ export default {
         next() {
             this.request.post('/neworder/OrderConfirmation/update', this.form)
             console.log(this.form);
+            if (this.result === 1 ) {
+                this.$message({
+                    showClose: true,
+                    message: 'ご注文ありがとうございます。',
+                    type: 'success'
+                })
+            } else {
+                this.$message({
+                    showClose: true,
+                    message: '注文内容が存在しません。',
+                    type: 'warning'
+                })
+            }
+
         },
         back() {
             this.$emit('back');

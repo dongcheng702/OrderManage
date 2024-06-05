@@ -256,7 +256,7 @@ export default {
           }
         })
         .catch((err) => {
-          this.$message.error("无法获取默认配送信息");
+          // this.$message.error("无法获取默认配送信息");
         });
     },
     fetchDeliveryMethods() {

@@ -48,7 +48,7 @@
         </div>
         <el-drawer title="注文リスト" :visible.sync="drawer" :direction="direction" :before-close="handleClose">
             <el-table :data="orderList" border>
-                <el-table-column prop="productId" label="商品ID"></el-table-column>
+                <!-- <el-table-column prop="productId" label="商品ID"></el-table-column> -->
                 <el-table-column prop="productName" label="商品名"></el-table-column>
                 <el-table-column prop="productPrice" label="商品単価"></el-table-column>
                 <el-table-column prop="quantity" label="購入数量"></el-table-column>
@@ -130,19 +130,19 @@ export default {
         },
         next() {
             console.log(this.orderList);
-            // if (this.orderList.length === 0) {
-            //     this.$message({
-            //         showClose: true,
-            //         type: 'warning',
-            //         message: '商品を追加してください'
-            //     });
-                // return;
-            // }
-            // this.request.post(baseURL + "addOrderDetails", this.orderList).then(res => {
-              //  this.$emit('next', res.data);
+            if (this.orderList.length === 0) {
+                this.$message({
+                    showClose: true,
+                    type: 'warning',
+                    message: '商品を追加してください'
+                });
+                return;
+            }
+            this.request.post(baseURL + "addOrderDetails", this.orderList).then(res => {
+               this.$emit('next', res.data);
 
-            // });
-this.$emit('next', '');
+            });
+// this.$emit('next', '');
         },
         handleSelectionChange(val) {
             //console.log(JSON.stringify(val, null, 2));

@@ -53,10 +53,10 @@
           <el-table-column type="selection"> </el-table-column>
           <el-table-column prop="orderNumber" label="注文ID" min-width="10%" header-align="center">
             <template slot-scope="scope">
-            <el-link type="primary" @click="Details()">{{ scope.row.orderNumber }}</el-link>
-          </template>
+              <el-link type="primary" @click="Details()">{{ scope.row.orderNumber }}</el-link>
+            </template>
           </el-table-column>
-        
+
           <el-table-column prop="orderDate" label="注文日" min-width="10%" align="center"
             header-align="center"></el-table-column>
           <el-table-column prop="orderQuantity" label="注文数量" min-width="10%" align="right"
@@ -115,10 +115,10 @@
             :total="total"></el-pagination>
         </div>
         <!-- 子组件OrderDetails，绑定isVisible属性并监听update:isVisible事件 -->
-        <OrderDetails :isVisible="isDialogVisible" @update:isVisible="updateDialogVisible"></OrderDetails>
+        <OrderDetails :isVisible.sync="isDialogVisible" @update:isVisible="updateDialogVisible"></OrderDetails>
       </div>
     </div>
-    <Payment :dialogTableVisible.sync="dialogTableVisible" ref="payment"/>
+    <Payment :dialogTableVisible.sync="dialogTableVisible" :order-id="orderId" ref="payment" />
   </div>
 
 </template>
@@ -145,6 +145,7 @@ export default {
       isDialogVisible: false, // 控制对话框显示的状态
       value2: "",
       dialogTableVisible: false,
+      orderId : 1,
       pickerOptions: {
         shortcuts: [
           {
@@ -210,7 +211,9 @@ export default {
       ],
     };
   },
-  props: {},
+  props: {
+
+  },
   methods: {
     handleSelectionChange(val) {
       console.log(val);
@@ -268,4 +271,3 @@ export default {
   },
 };
 </script>
-

@@ -1,12 +1,13 @@
 <template>
-  <!-- 使用 el-dialog 组件来创建对话框 -->
-  <!-- 绑定本地变量 localVisible -->
   <div>
     <el-dialog :visible="localVisible" width="65%" @close="closeDialog" text-align:center>
       <template #title>
         <div style="text-align: center; width: 100%">注文明細</div>
       </template>
-      <span>注文ID:{{ orderId }}</span>
+      <div v-if="isVisible">
+        <!-- 注文ID:{{ orderId }} -->
+      </div>
+        
 
       <el-table :data="tableData" style="width: 100%; margin-top:10px">
         <el-table-column prop="productName" label="商品名" style="min-width:16%">
@@ -35,17 +36,18 @@ export default {
       type: Boolean,
       default: false,
     },
-    orderId: {
-      type: Boolean,
-      required: true,
-      default:1,
-    },
+    // orderId: {
+    //   type: [String, Number],
+    //   required: true,
+    //   default:1,
+    // },
   },
   data() {
     return {
       localVisible: this.isVisible, // 使用一个本地的 `data` 属性来存储初始的 isVisible 值
       amountSum:0,
       productTypeCount:0,
+      id: 1,
       tableData: [
         {
           productName: "商品1",

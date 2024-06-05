@@ -20,29 +20,30 @@ export default {
   data() {
     return {
       active: 0,
+      orderId:0
     };
   },
   created() { },
   methods: {
     next(data) {
       console.log(data);
-      let id = 0;
       if (this.active++ > 2) this.active = 0;
       if (this.active == 0) {
         this.$router.push("orderlist");
-        id = data;
       }
       if (this.active == 1) {
+        this.orderId = data;
         this.$router.push({
           name: "ShippingAndBilling",
-          params: { data: data },
+          params: { orderId: this.orderId },
         });
       }
       if (this.active == 2) {
         this.$router.push({
           name: "OrderConfirmation",
-          params: { ruleForm: data , id : id},
+          params: { ruleForm: data , orderId : this.orderId},
         });
+       
       }
     },
     back() {
